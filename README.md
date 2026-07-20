@@ -1,6 +1,6 @@
-# mssqlAgent
+# an5Agent
 
-AI agent library for MSSQL ORM. Provides 13 tools for schema exploration, query generation, database operations, code generation, and RAG-powered semantic search.
+AI agent library for AN5 ORM. Provides 13 tools for schema exploration, query generation, database operations, code generation, and RAG-powered semantic search.
 
 ## Features
 
@@ -19,7 +19,7 @@ npm install
 ## Usage
 
 ```typescript
-import { createAgent } from 'mssql-agent';
+import { createAgent } from 'an5-agent';
 
 const agent = createAgent();
 
@@ -27,7 +27,7 @@ const agent = createAgent();
 const response = await agent.process({
   userQuestion: 'List all users with their orders',
   toolContext: {
-    schemaPath: '../mssqlSchema',
+    schemaPath: '../an5Schema',
     connectionString: process.env.DATABASE_URL,
   },
 });
@@ -37,7 +37,7 @@ console.log(response.toolCalls);
 
 // Execute individual tools
 const models = await agent.executeTool('listModels', {
-  schemaPath: '../mssqlSchema',
+  schemaPath: '../an5Schema',
 });
 
 const sql = await agent.executeTool('generateQuery', {
@@ -77,7 +77,7 @@ npm run rag:index
 ## Custom Tools
 
 ```typescript
-import { createAgent, Tool } from 'mssql-agent';
+import { createAgent, Tool } from 'an5-agent';
 
 const myTool: Tool = {
   name: 'myCustomTool',
@@ -108,7 +108,7 @@ npm test
 User Question
      │
      ▼
-MssqlAgent.process()
+An5Agent.process()
      │
      ├─► Schema Tools (listModels, describeModel, ...)
      ├─► Query Tools (generateQuery, explainQuery, ...)

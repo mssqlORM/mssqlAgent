@@ -1,5 +1,5 @@
 /**
- * mssqlAgent Unit Tests
+ * an5Agent Unit Tests
  * Tests for agent tools structure and API.
  * Run: node test/unit.test.js
  */
@@ -34,21 +34,21 @@ function assertExists(filePath) {
   }
 }
 
-console.log('\n=== mssqlAgent Unit Tests ===\n');
+console.log('\n=== an5Agent Unit Tests ===\n');
 
 // ─── Agent core ──────────────────────────────────────────────────────────────
 
 console.log('Agent Core:');
 
-test('src/index.ts exists with MssqlAgent class', () => {
+test('src/index.ts exists with An5Agent class', () => {
   const content = fs.readFileSync(path.join(__dirname, '..', 'src', 'index.ts'), 'utf8');
-  assertIncludes(content, 'export class MssqlAgent');
+  assertIncludes(content, 'export class An5Agent');
   assertIncludes(content, 'export function createAgent');
   assertIncludes(content, 'async process');
   assertIncludes(content, 'async executeTool');
 });
 
-test('MssqlAgent has tool management methods', () => {
+test('An5Agent has tool management methods', () => {
   const content = fs.readFileSync(path.join(__dirname, '..', 'src', 'index.ts'), 'utf8');
   assertIncludes(content, 'getTools()');
   assertIncludes(content, 'getTool(');
@@ -173,9 +173,9 @@ test('rag-tools.ts exports retrieveQuerySamplesTool', () => {
 
 console.log('\nRAG Pipeline:');
 
-test('rag/indexer.ts exports parseMssqlSchema', () => {
+test('rag/indexer.ts exports parseAn5Schema', () => {
   const content = fs.readFileSync(path.join(__dirname, '..', 'src', 'rag', 'indexer.ts'), 'utf8');
-  assertIncludes(content, 'export function parseMssqlSchema');
+  assertIncludes(content, 'export function parseAn5Schema');
 });
 
 test('rag/indexer.ts exports indexSchema', () => {
@@ -217,10 +217,10 @@ console.log('\nPackage & Config:');
 
 test('package.json is valid with dependencies', () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
-  assertIncludes(pkg.name, 'mssql-agent');
+  assertIncludes(pkg.name, 'an5-agent');
   assert(typeof pkg.dependencies === 'object', 'dependencies should be an object');
   assert('genkit' in pkg.dependencies, 'should have genkit dependency');
-  assert('mssql-adapters' in pkg.dependencies, 'should have mssql-adapters dependency');
+  assert('an5-adapters' in pkg.dependencies, 'should have an5-adapters dependency');
 });
 
 test('AGENTS.md exists with purpose', () => {

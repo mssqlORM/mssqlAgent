@@ -4,7 +4,7 @@ import { indexSchema, indexQuerySamples } from '../src/rag/indexer';
 
 async function main() {
   const rootDir = path.resolve(__dirname, '..', '..');
-  const schemaDir = process.argv[2] || path.join(rootDir, 'mssqlSchema');
+  const schemaDir = process.argv[2] || path.join(rootDir, 'an5Schema');
 
   console.log(`\n📚 RAG Indexer\n`);
   console.log(`Schema dir: ${schemaDir}`);

@@ -39,7 +39,7 @@ export {
   updateTaskTool,
   deleteTask,
 } from './tools';
-export { indexSchema, indexQuerySamples, retrieveSchema, retrieveQuerySamples, parseMssqlSchema } from './rag/indexer';
+export { indexSchema, indexQuerySamples, retrieveSchema, retrieveQuerySamples, parseAn5Schema } from './rag/indexer';
 
 export interface DatabaseInsight {
   databaseName?: string;
@@ -68,7 +68,7 @@ const DEFAULT_TOOLS: Tool[] = [
   createTask, listTasks, updateTaskTool, deleteTask,
 ];
 
-export class MssqlAgent {
+export class An5Agent {
   private tools: Map<string, Tool>;
 
   constructor(tools?: Tool[]) {
@@ -185,8 +185,8 @@ export class MssqlAgent {
   }
 }
 
-export function createAgent(tools?: Tool[]): MssqlAgent {
-  return new MssqlAgent(tools);
+export function createAgent(tools?: Tool[]): An5Agent {
+  return new An5Agent(tools);
 }
 
 function extractModelName(question: string): string | null {

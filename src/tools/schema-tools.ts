@@ -4,7 +4,7 @@ import { ModelSchema } from './tool-types';
 import { loadMetadata } from './metadata';
 
 const listModelsInputSchema = z.object({
-  schemaPath: z.string().optional().describe('Path to .mssql schema file or directory'),
+  schemaPath: z.string().optional().describe('Path to .an5 schema file or directory'),
 });
 
 const listModelsOutputSchema = z.object({
@@ -41,7 +41,7 @@ export const listModels: Tool = {
 
 const describeModelInputSchema = z.object({
   modelName: z.string().describe('Name of the model to describe (case-sensitive)'),
-  schemaPath: z.string().optional().describe('Path to .mssql schema file or directory'),
+  schemaPath: z.string().optional().describe('Path to .an5 schema file or directory'),
 });
 
 const describeModelOutputSchema = z.object({
@@ -73,7 +73,7 @@ export const describeModel: Tool = {
 
 const getRelationsInputSchema = z.object({
   modelName: z.string().optional().describe('Optional: filter relations for a specific model'),
-  schemaPath: z.string().optional().describe('Path to .mssql schema file or directory'),
+  schemaPath: z.string().optional().describe('Path to .an5 schema file or directory'),
 });
 
 const getRelationsOutputSchema = z.object({
@@ -132,7 +132,7 @@ function parseModels(schemaPath?: string): Array<{
     type: string;
   }>;
 }> {
-  // Try loading from mssqlClient metadata first
+  // Try loading from an5Client metadata first
   const metadata = loadMetadata();
   if (metadata) {
     const { modelToTable, modelFields } = metadata;
@@ -155,7 +155,7 @@ function parseModels(schemaPath?: string): Array<{
     });
   }
 
-  // Fallback: parse .mssql files directly
+  // Fallback: parse .an5 files directly
   const target = schemaPath || defaultSchemaPath();
   if (target) {
     try {
@@ -164,13 +164,13 @@ function parseModels(schemaPath?: string): Array<{
       const fullPath = path.resolve(target);
       const stat = fs.statSync(fullPath);
       const files = stat.isDirectory()
-        ? fs.readdirSync(fullPath).filter((f: string) => f.endsWith('.mssql'))
+        ? fs.readdirSync(fullPath).filter((f: string) => f.endsWith('.an5'))
         : [path.basename(fullPath)];
       const allModels: any[] = [];
       for (const file of files) {
         const dir = stat.isDirectory() ? fullPath : path.dirname(fullPath);
         const content = fs.readFileSync(path.join(dir, file), 'utf-8');
-        allModels.push(...parseMssqlContent(content));
+        allModels.push(...parseAn5Content(content));
       }
       if (allModels.length > 0) return allModels;
     } catch {}
@@ -181,15 +181,15 @@ function parseModels(schemaPath?: string): Array<{
 function defaultSchemaPath(): string | undefined {
   const path = require('path');
   const candidates = [
-    path.join(__dirname, '..', '..', '..', 'mssqlSchema'),
-    path.join(process.cwd(), 'mssqlSchema'),
+    path.join(__dirname, '..', '..', '..', 'an5Schema'),
+    path.join(process.cwd(), 'an5Schema'),
     path.join(process.cwd(), 'schema'),
   ];
   try {
     const fs = require('fs');
     for (const dir of candidates) {
       if (fs.existsSync(dir)) {
-        const files = fs.readdirSync(dir).filter((f: string) => f.endsWith('.mssql'));
+        const files = fs.readdirSync(dir).filter((f: string) => f.endsWith('.an5'));
         if (files.length > 0) return dir;
       }
     }
@@ -197,7 +197,7 @@ function defaultSchemaPath(): string | undefined {
   return undefined;
 }
 
-function parseMssqlContent(content: string): Array<{
+function parseAn5Content(content: string): Array<{
   name: string;
   schema?: string;
   fields: any[];

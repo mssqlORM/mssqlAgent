@@ -12,9 +12,9 @@ export interface ModelBlock {
   relations: Array<{ name: string; target: string; foreignKey?: string; localKey?: string }>;
 }
 
-export function parseMssqlSchema(schemaDir: string): ModelBlock[] {
+export function parseAn5Schema(schemaDir: string): ModelBlock[] {
   if (!fs.existsSync(schemaDir)) return [];
-  const files = fs.readdirSync(schemaDir).filter((f) => f.endsWith('.mssql'));
+  const files = fs.readdirSync(schemaDir).filter((f) => f.endsWith('.an5'));
   const models: ModelBlock[] = [];
 
   for (const file of files) {
@@ -87,7 +87,7 @@ function buildSchemaDoc(model: ModelBlock): string {
 
 export async function indexSchema(schemaDir: string): Promise<{ indexed: number }> {
   const ai = getAi();
-  const models = parseMssqlSchema(schemaDir);
+  const models = parseAn5Schema(schemaDir);
   if (models.length === 0) {
     console.warn(`[rag] No models found in ${schemaDir}`);
     return { indexed: 0 };

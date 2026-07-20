@@ -3,7 +3,7 @@ import type { Tool, ToolContext } from './tool-types';
 
 function loadTasksModule() {
   try {
-    return require('../../../../mssqlTasks/dist/index');
+    return require('../../../../an5Tasks/dist/index');
   } catch {
     return null;
   }
@@ -29,7 +29,7 @@ export const createTask: Tool = {
   }),
   execute: async (input, context?) => {
     const mod = loadTasksModule();
-    if (!mod) throw new Error('mssqlTasks module not available. Build it first: cd mssqlTasks && npm run build');
+    if (!mod) throw new Error('an5Tasks module not available. Build it first: cd an5Tasks && npm run build');
 
     const workspaceDir = input.workspaceDir || context?.schemaPath || process.cwd();
     const tasks = await mod.createTasksFromReview(
@@ -60,7 +60,7 @@ export const listTasks: Tool = {
   })),
   execute: async (input, context?) => {
     const mod = loadTasksModule();
-    if (!mod) throw new Error('mssqlTasks module not available');
+    if (!mod) throw new Error('an5Tasks module not available');
 
     const workspaceDir = input.workspaceDir || context?.schemaPath || process.cwd();
     return mod.getTasks(workspaceDir, { status: input.status, priority: input.priority });
@@ -87,7 +87,7 @@ export const updateTaskTool: Tool = {
   }).nullable(),
   execute: async (input, context?) => {
     const mod = loadTasksModule();
-    if (!mod) throw new Error('mssqlTasks module not available');
+    if (!mod) throw new Error('an5Tasks module not available');
 
     const workspaceDir = input.workspaceDir || context?.schemaPath || process.cwd();
     return mod.updateTask(workspaceDir, input.taskId, { status: input.status, priority: input.priority });
@@ -104,7 +104,7 @@ export const deleteTask: Tool = {
   outputSchema: z.boolean(),
   execute: async (input, context?) => {
     const mod = loadTasksModule();
-    if (!mod) throw new Error('mssqlTasks module not available');
+    if (!mod) throw new Error('an5Tasks module not available');
 
     const workspaceDir = input.workspaceDir || context?.schemaPath || process.cwd();
     return mod.deleteTask(workspaceDir, input.taskId);

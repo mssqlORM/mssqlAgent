@@ -1,9 +1,9 @@
 const assert = require('assert');
-const { MssqlAgent, listModels, describeModel, generateQuery, analyzeSchema, executeQuery } = require('../dist/index.js');
+const { An5Agent, listModels, describeModel, generateQuery, analyzeSchema, executeQuery } = require('../dist/index.js');
 
 async function run() {
   // Test 1: Agent instantiation
-  const agent = new MssqlAgent();
+  const agent = new An5Agent();
   assert.ok(agent, 'Agent should be instantiated');
   assert.ok(agent.getTools().length >= 10, `Should have at least 10 tools, got ${agent.getTools().length}`);
   console.log(`✅ Agent created with ${agent.getTools().length} tools`);

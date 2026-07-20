@@ -97,9 +97,9 @@ function mapLegacyTsToSql(tsType: string): string {
 
 export function loadMetadata(): Metadata | null {
   try {
-    const clientDir = path.join(__dirname, '..', '..', '..', 'mssqlClient', 'typescript');
-    const tsPath = path.join(clientDir, 'mssqlMetadata.ts');
-    const jsPath = path.join(clientDir, 'mssqlMetadata.js');
+    const clientDir = path.join(__dirname, '..', '..', '..', 'an5Client', 'typescript');
+    const tsPath = path.join(clientDir, 'an5Metadata.ts');
+    const jsPath = path.join(clientDir, 'an5Metadata.js');
     return tryLoadFromFile(jsPath) || tryLoadFromFile(tsPath);
   } catch {}
   return null;

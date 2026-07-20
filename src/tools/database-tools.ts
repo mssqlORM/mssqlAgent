@@ -6,16 +6,16 @@ export interface DatabaseAdapter {
   version(): Promise<{ version: string; dbName: string }>;
 }
 
-let mssqlAdaptersAvailable = false;
+let an5AdaptersAvailable = false;
 try {
-  const mod = require(require('path').join(__dirname, '..', '..', '..', 'mssqlAdapters', 'typescript', 'mssqlAdapter'));
-  if (mod?.MssqlAdapter) mssqlAdaptersAvailable = true;
-} catch { /* mssqlAdapters not available */ }
+  const mod = require(require('path').join(__dirname, '..', '..', '..', 'an5Adapters', 'typescript', 'an5Adapter'));
+  if (mod?.An5Adapter) an5AdaptersAvailable = true;
+} catch { /* an5Adapters not available */ }
 
 function createAdapter(connectionString: string): DatabaseAdapter {
-  if (mssqlAdaptersAvailable) {
-    const mod = require(require('path').join(__dirname, '..', '..', '..', 'mssqlAdapters', 'typescript', 'mssqlAdapter'));
-    const adapter = new mod.MssqlAdapter({ connectionString });
+  if (an5AdaptersAvailable) {
+    const mod = require(require('path').join(__dirname, '..', '..', '..', 'an5Adapters', 'typescript', 'an5Adapter'));
+    const adapter = new mod.An5Adapter({ connectionString });
     return {
       exec: (q, p) => adapter.exec(q, p),
       version: async () => {
@@ -51,7 +51,7 @@ const executeQueryInputSchema = z.object({
 
 const executeQueryOutputSchema = z.object({
   success: z.boolean(),
-  adapter: z.string().optional().describe('Which adapter was used (mssqlAdapters or mssql)'),
+  adapter: z.string().optional().describe('Which adapter was used (an5Adapters or mssql)'),
   rows: z.array(z.record(z.string(), z.unknown())).optional().describe('Query result rows'),
   rowCount: z.number().optional().describe('Number of rows returned'),
   executionTimeMs: z.number().optional().describe('Approximate execution time'),
@@ -61,7 +61,7 @@ const executeQueryOutputSchema = z.object({
 export const executeQuery: Tool = {
   name: 'executeQuery',
   description:
-    'Execute a read-only (SELECT) SQL query against a SQL Server database. Uses mssqlAdapters for connection pooling when available, falls back to mssql package. ONLY for SELECT queries.',
+    'Execute a read-only (SELECT) SQL query against a SQL Server database. Uses an5Adapters for connection pooling when available, falls back to mssql package. ONLY for SELECT queries.',
   inputSchema: executeQueryInputSchema,
   outputSchema: executeQueryOutputSchema,
   async execute(input: { sql: string; connectionString?: string; params?: Record<string, unknown> }) {
@@ -78,7 +78,7 @@ export const executeQuery: Tool = {
       const elapsed = Date.now() - start;
       return {
         success: true,
-        adapter: mssqlAdaptersAvailable ? 'mssqlAdapters' : 'mssql',
+        adapter: an5AdaptersAvailable ? 'an5Adapters' : 'mssql',
         rows,
         rowCount: rows.length,
         executionTimeMs: elapsed,
@@ -112,7 +112,7 @@ const describeTableOutputSchema = z.object({
 export const describeTable: Tool = {
   name: 'describeTable',
   description:
-    'Get detailed information about a database table including column names, data types, nullability, primary keys, and indexes. Uses mssqlAdapters for database introspection when available.',
+    'Get detailed information about a database table including column names, data types, nullability, primary keys, and indexes. Uses an5Adapters for database introspection when available.',
   inputSchema: describeTableInputSchema,
   outputSchema: describeTableOutputSchema,
   async execute(input: { tableName: string; schema?: string; connectionString?: string }) {
@@ -141,7 +141,7 @@ export const describeTable: Tool = {
       );
       return {
         tableName: input.tableName, schema: safeSchema,
-        adapter: mssqlAdaptersAvailable ? 'mssqlAdapters' : 'mssql',
+        adapter: an5AdaptersAvailable ? 'an5Adapters' : 'mssql',
         columns: rows.map((row: any) => ({
           name: row.name, type: row.type, isNullable: row.isNullable === 'YES',
           isPrimaryKey: !!row.isPrimaryKey, maxLength: row.maxLength || undefined, defaultValue: row.defaultValue || undefined,
@@ -161,7 +161,7 @@ const healthCheckOutputSchema = z.object({
   connected: z.boolean(),
   serverVersion: z.string().optional(),
   databaseName: z.string().optional(),
-  adapter: z.string().optional().describe('Which adapter was used (mssqlAdapters or mssql)'),
+  adapter: z.string().optional().describe('Which adapter was used (an5Adapters or mssql)'),
   latencyMs: z.number().optional(),
   error: z.string().optional(),
 });
@@ -169,7 +169,7 @@ const healthCheckOutputSchema = z.object({
 export const healthCheck: Tool = {
   name: 'databaseHealthCheck',
   description:
-    'Check the database connection health, including server version, database name, and response latency. Uses mssqlAdapters when available, falls back to mssql package.',
+    'Check the database connection health, including server version, database name, and response latency. Uses an5Adapters when available, falls back to mssql package.',
   inputSchema: healthCheckInputSchema,
   outputSchema: healthCheckOutputSchema,
   async execute(input: { connectionString?: string }) {
@@ -181,7 +181,7 @@ export const healthCheck: Tool = {
       const start = Date.now();
       const info = await adapter.version();
       const elapsed = Date.now() - start;
-      return { connected: true, adapter: mssqlAdaptersAvailable ? 'mssqlAdapters' : 'mssql', serverVersion: info.version, databaseName: info.dbName, latencyMs: elapsed };
+      return { connected: true, adapter: an5AdaptersAvailable ? 'an5Adapters' : 'mssql', serverVersion: info.version, databaseName: info.dbName, latencyMs: elapsed };
     } catch (err: any) {
       return { connected: false, error: err.message || 'Connection failed' };
     }

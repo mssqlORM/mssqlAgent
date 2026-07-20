@@ -51,7 +51,7 @@ export const explainQuery: Tool = {
 
 const validateQueryInputSchema = z.object({
   sql: z.string().describe('The SQL query to validate'),
-  schemaPath: z.string().optional().describe('Path to .mssql schema for table/column validation'),
+  schemaPath: z.string().optional().describe('Path to .an5 schema for table/column validation'),
 });
 
 const validateQueryOutputSchema = z.object({

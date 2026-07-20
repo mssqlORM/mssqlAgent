@@ -1,13 +1,13 @@
-# mssqlAgent Agent Guide
+# an5Agent Agent Guide
 
 ## Purpose
-mssqlAgent is the agent-facing library for the MSSQL ORM ecosystem. It provides tools for database understanding, schema exploration, query generation, and RAG-powered context retrieval.
+an5Agent is the agent-facing library for the AN5 ORM ecosystem. It provides tools for database understanding, schema exploration, query generation, and RAG-powered context retrieval.
 
 ## Architecture
 
 ```
 src/
-├── index.ts              # MssqlAgent class (261 lines)
+├── index.ts              # An5Agent class (261 lines)
 ├── tools/
 │   ├── index.ts          # Barrel export
 │   ├── tool-types.ts     # Tool interface, Zod schemas
@@ -16,7 +16,7 @@ src/
 │   ├── database-tools.ts # executeQuery, describeTable, healthCheck
 │   ├── codegen-tools.ts  # generateClientCode, analyzeSchema
 │   ├── rag-tools.ts      # retrieveSchema, retrieveQuerySamples
-│   └── metadata.ts       # Load metadata from mssqlClient
+│   └── metadata.ts       # Load metadata from an5Client
 └── rag/
     ├── index.ts          # Genkit singleton + vector store config
     ├── indexer.ts         # Schema + query sample indexing
@@ -84,7 +84,7 @@ Uses Genkit v1.39 for:
 ## Cross-Repo Dependencies
 | Module | How Used |
 |--------|----------|
-| `mssqlAdapters` | `MssqlAdapter` for DB operations |
-| `mssqlClient` | Types and metadata |
-| `mssqlSchema` | `.mssql` schema files |
-| `mssqlTasks` | Task format for issue tracking |
+| `an5Adapters` | `An5Adapter` for DB operations |
+| `an5Client` | Types and metadata |
+| `an5Schema` | `.an5` schema files |
+| `an5Tasks` | Task format for issue tracking |

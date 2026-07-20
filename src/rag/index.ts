@@ -3,8 +3,8 @@ import { devLocalVectorstore, devLocalIndexerRef, devLocalRetrieverRef } from '@
 import { customEmbedder } from './embedder';
 import path from 'path';
 
-export const VECTOR_SCHEMA = 'mssql-schema';
-export const VECTOR_QUERIES = 'mssql-queries';
+export const VECTOR_SCHEMA = 'an5-schema';
+export const VECTOR_QUERIES = 'an5-queries';
 
 const vectorStoreDir = path.join(__dirname, '..', '..', '.genkit', 'vectorstore');
 
